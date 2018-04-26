@@ -1,156 +1,101 @@
-ThinkPHP 5.1
+Wolf Blog 博客源码开源共享，作者博客地址：https://blog.wangjianbo.cn/
 ===============
+欢迎加入群交流：652087037   【新建2000人群，等待发展】
 
-ThinkPHP5.1对底层架构做了进一步的改进，减少依赖，其主要特性包括：
+使用源码后请在您的网站地址链接或说明来源【可选】
 
- + 采用容器统一管理对象
- + 支持Facade
- + 注解路由支持
- + 路由跨域请求支持
- + 配置和路由目录独立
- + 取消系统常量
- + 助手函数增强
- + 类库别名机制
- + 增加条件查询
- + 改进查询机制
- + 配置采用二级
- + 依赖注入完善
- + 中间件支持（V5.1.6+）
+依赖Thinkphp5.1.12搭建，如果有使用的小伙伴可以浏览官方文档说明进行深入研究
+文档地址：https://www.kancloud.cn/manual/thinkphp5_1/353946
+之后还会继续更新Thinkphp版本
+
+本地搭建建议使用PHPstudy环境，官方地址：http://www.phpstudy.net/
+
+特别提醒：项目的访问目录是/public/
+【网站默认是开启app_debug的，如需调试，请前往/config/app.php中自行开启或关闭】
+
+################################
+####### 相关修改和添加说明 #########
+################################
+
+####################################
+==========================================================>添加：
+####################################
+
+搭建后的样式请预览同级目录下的demo.png文件
+
+1：新建测试数据库
+
+5.1.8版本更新后，我在/public/index.php中新增了自动添加数据库的代码，INSTALL_SQL 参数值默认为TRUE【自动执行数据库安装程序】
+然后重新访问网站首页即可，否则第一次访问会有Thinkphp的错误页面提示！
+【项目上线后请将INSTALL_SQL修改成FALSE或删除相关自行安装数据库的代码】
+已经创建过文章数据库的可以跳过此步骤
+数据库相关文件都在/extend/目录下
+删除数据库后请记得同时删除/extend/installsql.lock文件 【installsql.lock 存在表示系统已经创建过博客测试数据库】
+相关数据仅供测试使用
+
+2：常用定义
+在 \application\Common\const.php、\application\Common\define.php、 \application\common.php 定义了项目会经常使用的一些常量和方法
+其中 common.php 是Thinkphp自带的，任何分组都可以调用
+const.php 和 define.php 是自定义的，如果需要使用，可以引入【参考 \application\Common\Controller\BaseController.php】
 
 
-> ThinkPHP5的运行环境要求PHP5.6以上。
+####################################
+=========================================================>修改：
+####################################
+
+1：对底层的唯一修改就是在 \thinkphp\library\think\db\Query.php 大概第1476行 有一个注释 必改之处
+
+//必改之处：$where数组传入后字段丢失问题
+//$where[] = is_null($val) ? [$key, 'NULL', ''] : [$key, '=', $val];
+                    if (is_scalar($val)) {
+                        $where[$key] = [$key, '=', $val];
+                    } else {
+                        array_unshift($val, $key);
+                        $where[$key] = $val;
+                    }
+
+主要原因是因为习惯Thinkphp3.2的组合查询后在5.1中使用例如 ET、EGT、LT、ELT等方法会报错
+如果你已经习惯了5.1的组合查询，可以不修改底层，因为如果习惯使用我修改的这段之后在更新Thinphp版本都必须记得修改这个位置
+更新项目方法请使用官方文档中推荐的Composer update，不建议使用拷贝覆盖！！！
+
+2：\config\template.php
+// 模板后缀
+    'view_suffix' => 'php',
+默认使用的是html文件格式，博客改成了php，如果你习惯了html，可以替换回去
+
+// 模板文件名分隔符 你可以自行修改
+    'view_depr' => '_', 
+博客使用的是下划线，官方默认使用的是斜杆，这样要在view下面再新建一个文件夹。
+
+// 标签库标签开始标记
+    'taglib_begin' => '<',
+// 标签库标签结束标记
+    'taglib_end' => '>',
+默认的 taglib_begin和taglib_end分别是 '{' 和 '}' 
+我这边改成了以前版本中常用的'<' 和 '>' 
+如果习惯5.X写法的可以换回默认
+
+3：在项目中新增 Error.php 控制器 错误访问会自动指向404页面
+     404默认调用官方的助手函数 abort 只有在app_debug=False时才会正常显示404页面，否则会有相应的错误警告提示
+     404页面指定路径修改在 config\app.php 中 http_exception_template 修改
+
+##############################################
+
+如有任何疑问请留言，地址：  https://blog.wangjianbo.cn/info/107/
 
 
-## 目录结构
 
-初始的目录结构如下：
 
-~~~
-www  WEB部署目录（或者子目录）
-├─application           应用目录
-│  ├─common             公共模块目录（可以更改）
-│  ├─module_name        模块目录
-│  │  ├─common.php      模块函数文件
-│  │  ├─controller      控制器目录
-│  │  ├─model           模型目录
-│  │  ├─view            视图目录
-│  │  └─ ...            更多类库目录
-│  │
-│  ├─command.php        命令行定义文件
-│  ├─common.php         公共函数文件
-│  └─tags.php           应用行为扩展定义文件
-│
-├─config                应用配置目录
-│  ├─module_name        模块配置目录
-│  │  ├─database.php    数据库配置
-│  │  ├─cache           缓存配置
-│  │  └─ ...            
-│  │
-│  ├─app.php            应用配置
-│  ├─cache.php          缓存配置
-│  ├─cookie.php         Cookie配置
-│  ├─database.php       数据库配置
-│  ├─log.php            日志配置
-│  ├─session.php        Session配置
-│  ├─template.php       模板引擎配置
-│  └─trace.php          Trace配置
-│
-├─route                 路由定义目录
-│  ├─route.php          路由定义
-│  └─...                更多
-│
-├─public                WEB目录（对外访问目录）
-│  ├─index.php          入口文件
-│  ├─router.php         快速测试文件
-│  └─.htaccess          用于apache的重写
-│
-├─thinkphp              框架系统目录
-│  ├─lang               语言文件目录
-│  ├─library            框架类库目录
-│  │  ├─think           Think类库包目录
-│  │  └─traits          系统Trait目录
-│  │
-│  ├─tpl                系统模板目录
-│  ├─base.php           基础定义文件
-│  ├─console.php        控制台入口文件
-│  ├─convention.php     框架惯例配置文件
-│  ├─helper.php         助手函数文件
-│  ├─phpunit.xml        phpunit配置文件
-│  └─start.php          框架入口文件
-│
-├─extend                扩展类库目录
-├─runtime               应用的运行时目录（可写，可定制）
-├─vendor                第三方类库目录（Composer依赖库）
-├─build.php             自动生成定义文件（参考）
-├─composer.json         composer 定义文件
-├─LICENSE.txt           授权说明文件
-├─README.md             README 文件
-├─think                 命令行入口文件
-~~~
 
-> router.php用于php自带webserver支持，可用于快速测试
-> 切换到public目录后，启动命令：php -S localhost:8888  router.php
-> 上面的目录结构和名称是可以改变的，这取决于你的入口文件和配置参数。
 
-## 升级指导
 
-原有下面系统类库的命名空间需要调整：
 
-* think\App      => think\facade\App （或者 App ）
-* think\Cache    => think\facade\Cache （或者 Cache ）
-* think\Config   => think\facade\Config （或者 Config ）
-* think\Cookie   => think\facade\Cookie （或者 Cookie ）
-* think\Debug    => think\facade\Debug （或者 Debug ）
-* think\Hook     => think\facade\Hook （或者 Hook ）
-* think\Lang     => think\facade\Lang （或者 Lang ）
-* think\Log      => think\facade\Log （或者 Log ）
-* think\Request  => think\facade\Request （或者 Request ）
-* think\Response => think\facade\Reponse （或者 Reponse ）
-* think\Route    => think\facade\Route （或者 Route ）
-* think\Session  => think\facade\Session （或者 Session ）
-* think\Url      => think\facade\Url （或者 Url ）
 
-原有的配置文件config.php 拆分为app.php cache.php 等独立配置文件 放入config目录。
-原有的路由定义文件route.php 移动到route目录
 
-## 命名规范
 
-`ThinkPHP5`遵循PSR-2命名规范和PSR-4自动加载规范，并且注意如下规范：
 
-### 目录和文件
 
-*   目录不强制规范，驼峰和小写+下划线模式均支持；
-*   类库、函数文件统一以`.php`为后缀；
-*   类的文件名均以命名空间定义，并且命名空间的路径和类库文件所在路径一致；
-*   类名和类文件名保持一致，统一采用驼峰法命名（首字母大写）；
 
-### 函数和类、属性命名
-*   类的命名采用驼峰法，并且首字母大写，例如 `User`、`UserType`，默认不需要添加后缀，例如`UserController`应该直接命名为`User`；
-*   函数的命名使用小写字母和下划线（小写字母开头）的方式，例如 `get_client_ip`；
-*   方法的命名使用驼峰法，并且首字母小写，例如 `getUserName`；
-*   属性的命名使用驼峰法，并且首字母小写，例如 `tableName`、`instance`；
-*   以双下划线“__”打头的函数或方法作为魔法方法，例如 `__call` 和 `__autoload`；
 
-### 常量和配置
-*   常量以大写字母和下划线命名，例如 `APP_PATH`和 `THINK_PATH`；
-*   配置参数以小写字母和下划线命名，例如 `url_route_on` 和`url_convert`；
 
-### 数据表和字段
-*   数据表和字段采用小写加下划线方式命名，并注意字段名不要以下划线开头，例如 `think_user` 表和 `user_name`字段，不建议使用驼峰和中文作为数据表字段命名。
 
-## 参与开发
-请参阅 [ThinkPHP5 核心框架包](https://github.com/top-think/framework)。
-
-## 版权信息
-
-ThinkPHP遵循Apache2开源协议发布，并提供免费使用。
-
-本项目包含的第三方源码和二进制文件之版权信息另行标注。
-
-版权所有Copyright © 2006-2018 by ThinkPHP (http://thinkphp.cn)
-
-All rights reserved。
-
-ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
-
-更多细节参阅 [LICENSE.txt](LICENSE.txt)
