@@ -17,9 +17,9 @@ Wolf Blog 博客源码开源共享
 
 搭建后的样式请预览同级目录下的demo.png文件
 
-相关修改和添加说明
+## 相关修改和添加说明
 
-##添加
+## 添加
 
  + 新建测试数据库
  
@@ -37,7 +37,7 @@ Wolf Blog 博客源码开源共享
 其中 common.php 是Thinkphp自带的，任何分组都可以调用
 const.php 和 define.php 是自定义的，如果需要使用，可以引入【参考 \application\Common\Controller\BaseController.php】
 
-##修改：
+## 修改：
 
  + 对底层的唯一修改就是在 \thinkphp\library\think\db\Query.php 大概第1476行 有一个注释 必改之处
 
