@@ -22,7 +22,7 @@ class BlogBaseController extends BaseController {
     }
 
     public function blogTpl() {
-        //直接引入头部和底部文件，在新建页面模版的时候省去重复引入的缓节
+        //直接引入头部和底部文件，在新建页面模版的时候省去重复引入的环节
         $contrroller = strtolower(CONTROLLER_NAME);
         $action = strtolower(ACTION_NAME);
         return $this->fetch('public:head') . $this->fetch($contrroller . '_' . $action) . $this->fetch('public:foot');
