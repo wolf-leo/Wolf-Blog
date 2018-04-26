@@ -2,7 +2,7 @@
 
     作者博客地址：https://blog.wangjianbo.cn/
 
-    欢迎加入群交流：652087037&nbsp; &nbsp;【新建2000人群，等待发展】
+    欢迎加入群交流：652087037 【新建2000人群，等待发展】
 
     使用源码后请在您的网站地址链接或说明来源【可选】
 
@@ -22,7 +22,6 @@
 
 ## 
     相关修改和添加说明
-
 ### 
     添加：
 
@@ -56,17 +55,17 @@
 > 
 >         //$where[] = is_null($val) ? [$key, &#39;NULL&#39;, &#39;&#39;] : [$key, &#39;=&#39;, $val];
 > 
->         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (is_scalar($val)) {
+>                   if (is_scalar($val)) {
 > 
->         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; $where[$key] = [$key, &#39;=&#39;, $val];
+>                     $where[$key] = [$key, &#39;=&#39;, $val];
 > 
->         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {
+>                   } else {
 > 
->         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; array_unshift($val, $key);
+>                     array_unshift($val, $key);
 > 
->         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; $where[$key] = $val;
+>                     $where[$key] = $val;
 > 
->         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }
+>                   }
 > 
 >         主要原因是因为习惯Thinkphp3.2的组合查询后在5.1中使用例如 ET、EGT、LT、ELT等方法会报错
 > 
@@ -77,33 +76,33 @@
 *   \config\template.php
 > // 模板后缀
 > 
->         &nbsp; &nbsp; &#39;view_suffix&#39; =&gt; &#39;php&#39;,
+>           'view_suffix' => 'php',
 > 
 >         默认使用的是html文件格式，博客改成了php，如果你习惯了html，可以替换回去
 > 
 >         // 模板文件名分隔符 你可以自行修改
 > 
->         &nbsp; &nbsp; &#39;view_depr&#39; =&gt; &#39;_&#39;,&nbsp;
+>           'view_depr' => '_',
 > 
 >         博客使用的是下划线，官方默认使用的是斜杆，这样要在view下面再新建一个文件夹。
 > 
 >         // 标签库标签开始标记
 > 
->         &nbsp; &nbsp; &#39;taglib_begin&#39; =&gt; &#39;&lt;&#39;,
+>           'taglib_begin' => '<',
 > 
 >         // 标签库标签结束标记
 > 
->         &nbsp; &nbsp; &#39;taglib_end&#39; =&gt; &#39;&gt;&#39;,
+>           'taglib_end' => '>',
 > 
->         默认的 taglib_begin和taglib_end分别是 &#39;{&#39; 和 &#39;}&#39;&nbsp;
+>         默认的 taglib_begin和taglib_end分别是 '{' 和 '}'  
 > 
->         我这边改成了以前版本中常用的&#39;&lt;&#39; 和 &#39;&gt;&#39;&nbsp;
+>         我这边改成了以前版本中常用的'<' 和 '>'
 > 
 >         如果习惯5.X写法的可以换回默认
 
 *   在项目中新增 Error.php 控制器 错误访问会自动指向404页面
-> &nbsp; &nbsp; &nbsp;404默认调用官方的助手函数 abort 只有在app_debug=False时才会正常显示404页面，否则会有相应的错误警告提示
+>   404默认调用官方的助手函数 abort 只有在app_debug=False时才会正常显示404页面，否则会有相应的错误警告提示
 > 
->         &nbsp; &nbsp; &nbsp;404页面指定路径修改在 config\app.php 中 http_exception_template 修改
+>           404页面指定路径修改在 config\app.php 中 http_exception_template 修改
 
-    如有任何疑问请留言，地址：&nbsp; https://blog.wangjianbo.cn/info/107/
+    如有任何疑问请留言，地址： https://blog.wangjianbo.cn/info/107/
