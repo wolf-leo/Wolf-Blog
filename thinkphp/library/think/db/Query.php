@@ -1472,8 +1472,9 @@ class Query {
     protected function parseArrayWhereItems($field, $logic) {
         if (key($field) !== 0) {
             $where = [];
-        foreach ($field as $key => $val) {
-			$where[] = is_null($val) ? [$key, 'NULL', ''] : [$key, '=', $val];
+			foreach ($field as $key => $val) {
+				$where[] = is_null($val) ? [$key, 'NULL', ''] : [$key, '=', $val];
+			} 
         } else {
             // 数组批量查询
             $where = $field;
