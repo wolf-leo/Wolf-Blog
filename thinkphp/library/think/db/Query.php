@@ -1472,25 +1472,15 @@ class Query {
     protected function parseArrayWhereItems($field, $logic) {
         if (key($field) !== 0) {
             $where = [];
-            foreach ($field as $key => $val) {
-//必改之处：$where数组传入后字段丢失问题
-//$where[] = is_null($val) ? [$key, 'NULL', ''] : [$key, '=', $val];
-                if (is_scalar($val)) {
-                    $where[$key] = [$key, '=', $val];
-                } else {
-                    array_unshift($val, $key);
-                    $where[$key] = $val;
-                }
-            }
+        foreach ($field as $key => $val) {
+			$where[] = is_null($val) ? [$key, 'NULL', ''] : [$key, '=', $val];
         } else {
             // 数组批量查询
             $where = $field;
         }
-
         if (!empty($where)) {
             $this->options['where'][$logic] = isset($this->options['where'][$logic]) ? array_merge($this->options['where'][$logic], $where) : $where;
         }
-
         return $this;
     }
 

@@ -50,30 +50,6 @@ const.php 和 define.php 是自定义的，如果需要使用，可以引入【�
 
 ## 修改：
 
- + 对底层的唯一修改就是在 \thinkphp\library\think\db\Query.php 大概第1476行 有一个注释 必改之处
-
-//必改之处：$where数组传入后字段丢失问题
-
-//$where[] = is_null($val) ? [$key, 'NULL', ''] : [$key, '=', $val];
-
-	if (is_scalar($val)) {
-						
-		$where[$key] = [$key, '=', $val];
-							
-	} else {
-						
-		array_unshift($val, $key);
-							
-		$where[$key] = $val;
-							
-	}
-
-主要原因是因为习惯Thinkphp3.2的组合查询后在5.1中使用例如 ET、EGT、LT、ELT等方法会报错
-
-如果你已经习惯了5.1的组合查询，可以不修改底层，因为如果习惯使用我修改的这段之后在更新Thinphp版本都必须记得修改这个位置
-
-更新项目方法请使用官方文档中推荐的Composer update，不建议使用拷贝覆盖！！！
-
  + \config\template.php
  
 // 模板后缀
