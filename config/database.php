@@ -15,11 +15,11 @@ return [
     'type' => 'mysql',
     // 服务器地址
     'hostname' => '127.0.0.1',
-    // 数据库名
+    // 数据库名 测试数据库名称 不用修改
     'database' => 'blog_test',
-    // 用户名
+    // 用户名  需要修改的地方
     'username' => 'root',
-    // 密码
+    // 密码     需要修改的地方
     'password' => 'root',
     // 端口
     'hostport' => '3306',

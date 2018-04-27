@@ -23,7 +23,7 @@
 
 ## 访问说明
 
-只要配置好 /config/database.php 中的数据库连接信息
+只要配置好 /config/database.php 中的数据库连接信息（主要修改的是 username 和 password 两个参数值）
 
 利用phpstudy或者其他本地php服务绑定访问路径 /public 后直接访问博客首页就可以正常显示博客网站
 
