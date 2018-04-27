@@ -56,17 +56,17 @@ const.php 和 define.php 是自定义的，如果需要使用，可以引入【�
 
 //$where[] = is_null($val) ? [$key, 'NULL', ''] : [$key, '=', $val];
 
-                    if (is_scalar($val)) {
-					
-                        $where[$key] = [$key, '=', $val];
+	if (is_scalar($val)) {
 						
-                    } else {
-					
-                        array_unshift($val, $key);
+		$where[$key] = [$key, '=', $val];
+							
+	} else {
 						
-                        $where[$key] = $val;
-						
-                    }
+		array_unshift($val, $key);
+							
+		$where[$key] = $val;
+							
+	}
 
 主要原因是因为习惯Thinkphp3.2的组合查询后在5.1中使用例如 ET、EGT、LT、ELT等方法会报错
 
