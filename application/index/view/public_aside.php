@@ -8,7 +8,7 @@
             </a>
         </p>
         <p>
-            <a href="https://blog.wangjianbo.cn?from=<?php echo urlencode(SITE_URL); ?>" target="_blank">作者 — — Wolf Blog</a>
+            <a href="https://blog.wangjianbo.cn" target="_blank">作者 — — Wolf Blog</a>
         </p>
     </div>
     <div class="mydiv" id="mydiv">
