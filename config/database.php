@@ -15,7 +15,7 @@ return [
     'type' => 'mysql',
     // 服务器地址
     'hostname' => '127.0.0.1',
-    // 数据库名 测试数据库名称 不用修改
+    // 数据库名 测试数据库名称 不用修改 否则默认安装会出错
     'database' => 'blog_test',
     // 用户名  需要修改的地方
     'username' => 'root',
