@@ -33,7 +33,7 @@
 
 如果你之前已经安装过，那么切换到你的应用根目录下面，然后执行下面的命令进行更新：
 
-composer update topthink/framework
+    composer update topthink/framework
 
 ## 相关修改和添加说明
 
