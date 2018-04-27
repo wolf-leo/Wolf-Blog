@@ -27,6 +27,13 @@
 
 利用phpstudy或者其他本地php服务绑定访问路径 /public 后直接访问博客首页就可以正常显示博客网站
 
+## 如何更新Thinkphp版本
+
+ + 详情参考[Thinkphp官方手册](https://www.kancloud.cn/manual/thinkphp5_1/353948) 
+
+如果你之前已经安装过，那么切换到你的应用根目录下面，然后执行下面的命令进行更新：
+
+composer update topthink/framework
 
 ## 相关修改和添加说明
 
