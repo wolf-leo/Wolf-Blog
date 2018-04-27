@@ -57,14 +57,14 @@ composer update topthink/framework
 
  + 常用定义
  
-在 \application\Common\const.php、\application\Common\define.php、 \application\common.php 定义了项目会经常使用的一些常量和方法
+在 /application/Common/const.php、/application/Common/define.php、 /application/common.php 定义了项目会经常使用的一些常量和方法
 其中 common.php 是Thinkphp自带的，任何分组都可以调用
 
-const.php 和 define.php 是自定义的，如果需要使用，可以引入【参考 \application\Common\Controller\BaseController.php】
+const.php 和 define.php 是自定义的，如果需要使用，可以引入【参考 /application/Common/Controller/BaseController.php】
 
 ## 修改：
 
- + \config\template.php
+ + /config/template.php
  
 // 模板后缀
 
@@ -96,7 +96,7 @@ const.php 和 define.php 是自定义的，如果需要使用，可以引入【�
  
      404默认调用官方的助手函数 abort 只有在app_debug=False时才会正常显示404页面，否则会有相应的错误警告提示
 	 
-     404页面指定路径修改在 config\app.php 中 http_exception_template 修改
+     404页面指定路径修改在 /config/app.php 中 http_exception_template 修改
 
 如有任何疑问请留言，地址：  https://blog.wangjianbo.cn/info/107/
 
