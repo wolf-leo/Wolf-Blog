@@ -21,6 +21,8 @@
 
 搭建后的样式请预览同级目录下的demo.png文件
 
+__配置好database.php的数据库信息，绑定访问路径到/public，访问首页即可__
+
 ## 访问说明
 
 只要配置好 /config/database.php 中的数据库连接信息（主要修改的是 username 和 password 两个参数值）
@@ -62,6 +64,12 @@
 
 const.php 和 define.php 是自定义的，如果需要使用，可以引入【参考 /application/Common/Controller/BaseController.php】
 
+ + 在项目中新增 Error.php 控制器 错误访问会自动指向404页面
+ 
+     404默认调用官方的助手函数 abort 只有在app_debug=False时才会正常显示404页面，否则会有相应的错误警告提示
+	 
+     404页面指定路径修改在 /config/app.php 中 http_exception_template 修改
+
 ## 修改：
 
  + /config/template.php
@@ -91,12 +99,6 @@ const.php 和 define.php 是自定义的，如果需要使用，可以引入【�
 我这边改成了以前版本中常用的'<' 和 '>' 
 
 如果习惯5.X写法的可以换回默认
-
- + 在项目中新增 Error.php 控制器 错误访问会自动指向404页面
- 
-     404默认调用官方的助手函数 abort 只有在app_debug=False时才会正常显示404页面，否则会有相应的错误警告提示
-	 
-     404页面指定路径修改在 /config/app.php 中 http_exception_template 修改
 
 如有任何疑问请留言，地址：  https://blog.wangjianbo.cn/info/107/
 
