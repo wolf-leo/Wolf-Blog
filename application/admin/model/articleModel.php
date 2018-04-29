@@ -50,49 +50,4 @@ class articleModel extends CommonModel {
         }
         return $info;
     }
-
-//更新
-    public function Dosave($data, $where) {
-        $ret = DbModel($this->table)->where($where)->strict(false)->update($data);
-        return $ret;
-    }
-
-//增加
-    public function Doadd($data) {
-        // 启动事务
-        \think\Db::startTrans();
-        try {
-            $id = DbModel($this->table)->strict(false)->insertGetId($data);
-            // 提交事务
-            \think\Db::commit();
-        } catch (\Exception $e) {
-            // 回滚事务
-            $id = FALSE;
-            \think\Db::rollback();
-        }
-        return $id;
-    }
-
-//删
-    public function Dodel($id, $where) {
-        if ($id) {
-            $where['id'] = $id;
-        }
-        if (empty($where)) {
-            return FALSE;
-        }
-        // 启动事务
-        \think\Db::startTrans();
-        try {
-            $x = DbModel($this->table)->where($where)->delete();
-            // 提交事务
-            \think\Db::commit();
-        } catch (\Exception $e) {
-            // 回滚事务
-            $x = FALSE;
-            \think\Db::rollback();
-        }
-        return $x;
-    }
-
 }
