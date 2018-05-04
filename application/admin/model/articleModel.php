@@ -22,7 +22,7 @@ class articleModel extends CommonModel {
     //查询
     public function getList($where = '', $page = 1, $pageSize = 20, $order = '') {
         if (!$order) {
-            $order[$this->pk] = "DESC";
+            $order = $this->pk . " DESC";
         }
         $list = DbModel($this->table)->where($where)->page($page)->limit($pageSize)->order($order)->select();
         return $list;
@@ -35,7 +35,7 @@ class articleModel extends CommonModel {
 
     public function getField($where = "", $field = "*", $order = '', $limit = '') {
         if (!$order) {
-            $order[$this->pk] = "DESC";
+            $order = $this->pk . " DESC";
         }
         $list = DbModel($this->table)->where($where)->order($order)->limit($limit)->column($field);
         return $list;

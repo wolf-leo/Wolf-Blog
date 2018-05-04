@@ -33,29 +33,29 @@ $dbName = $database['database'];
 $dbUser = $database['username'];
 $dbPwd = $database['password'];
 $dbPrefix = $database['prefix'];
-$conn = mysql_connect($dbHost, $dbUser, $dbPwd);
+$conn = mysqli_connect($dbHost, $dbUser, $dbPwd);
 
 if (!$conn) {
     exit("连接数据库失败！");
 }
-mysql_query("SET NAMES 'utf8'");
-$version = mysql_get_server_info($conn);
+mysqli_query($conn, "SET NAMES 'utf8'");
+$version = mysqli_get_server_info($conn);
 
 if ($version < 4.1) {
     exit("数据库版本太低！");
 }
 
-if (!mysql_query("CREATE DATABASE IF NOT EXISTS `" . $dbName . "`;", $conn)) {
+if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `" . $dbName . "`;")) {
     exit("数据库 ' . $dbName . ' 不存在，也没权限创建新的数据库！");
 }
 
 //读取数据文件
 $sql1 = file_get_contents($sql_base);
 $sql2 = file_get_contents($sql_data);
-if (!mysql_select_db($dbName, $conn)) {
+if (!mysqli_select_db($conn, $dbName)) {
     exit("数据库 ' . $dbName . ' 不存在！");
 }
-$tables = mysql_fetch_row(mysql_query("SHOW TABLES"));
+$tables = mysqli_fetch_row(mysqli_query($conn, "SHOW TABLES"));
 if (is_array($tables)) {
     if (in_array('article', $tables)) {
         @touch($lock_file);
@@ -63,15 +63,15 @@ if (is_array($tables)) {
         return TRUE;
     }
 }
-$result1 = mysql_query($sql1, $conn);
+$result1 = mysqli_query($conn, $sql1);
 $exp = array_filter(explode('INSERT INTO', ($sql2)));
 $count = count($exp) + 1;
 $value = '';
 foreach ($exp as $key => $value) {
     $query_sql = 'INSERT INTO ' . htmlspecialchars_decode($value);
-    $result2 = mysql_query($query_sql, $conn);
+    $result2 = mysqli_query($conn, $query_sql);
 }
-mysql_close($conn);
+mysqli_close($conn);
 if ($result2) {
     @touch($lock_file);
     header("Location:/");
