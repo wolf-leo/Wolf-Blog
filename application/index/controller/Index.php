@@ -16,7 +16,7 @@ class Index extends BlogBaseController {
         if (isset($type) && !isNumber($type)) {
             return $this->jump404();
         }
-        $pageSize = 20;
+        $pageSize = 5; //每页显示5条数据 可自行修改
         $mod = new \app\admin\model\articleModel();
         $where['status'] = 1;
         $type and $where['type'] = $type;
