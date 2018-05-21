@@ -27,12 +27,10 @@ if (INSTALL_SQL) {
         exit;
     }
 }
+//------------------------------项目正式上线后 请删除以上自动安装数据库的相关代码
 
 // 加载基础文件
 require __DIR__ . '/../thinkphp/base.php';
 
-//------------------------------项目正式上线后 请删除以上自动安装数据库的相关代码
-//
-//
 //bind('xxxx')  设置绑定index 
 Container::get('app')->bind('index')->run()->send();
