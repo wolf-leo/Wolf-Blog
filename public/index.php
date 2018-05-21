@@ -13,9 +13,6 @@
 
 namespace think;
 
-// 加载基础文件
-require __DIR__ . '/../thinkphp/base.php';
-
 /*
  *  INSTALL_SQL 是否默认自动安装数据库 
  *  TRUE 默认安装 
@@ -30,6 +27,10 @@ if (INSTALL_SQL) {
         exit;
     }
 }
+
+// 加载基础文件
+require __DIR__ . '/../thinkphp/base.php';
+
 //------------------------------项目正式上线后 请删除以上自动安装数据库的相关代码
 //
 //
