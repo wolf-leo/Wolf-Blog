@@ -18,8 +18,10 @@ class Index extends BlogBaseController {
         }
         $pageSize = 5; //每页显示5条数据 可自行修改
         $mod = new \app\admin\model\articleModel();
-        $where['status'] = 1;
-        $type and $where['type'] = $type;
+        $where[] = ['status', '=', 1];
+        if ($type) {
+            $where[] = ['type', '=', $type];
+        }
         $list = $mod->getList($where, $page, $pageSize);
         if (empty($list)) {
             return $this->jump404();
