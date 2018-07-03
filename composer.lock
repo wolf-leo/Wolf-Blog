@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "topthink/framework",
-            "version": "v5.1.17",
+            "version": "v5.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "61a66e8eeecf1584e0dc150a530f0d116e6ccd01"
+                "reference": "833fcaf0f29f23bdceaae655f64d10c18b9bf562"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/61a66e8eeecf1584e0dc150a530f0d116e6ccd01",
-                "reference": "61a66e8eeecf1584e0dc150a530f0d116e6ccd01",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/833fcaf0f29f23bdceaae655f64d10c18b9bf562",
+                "reference": "833fcaf0f29f23bdceaae655f64d10c18b9bf562",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2018-06-19T03:11:41+00:00"
+            "time": "2018-07-02T05:29:17+00:00"
         },
         {
             "name": "topthink/think-installer",
