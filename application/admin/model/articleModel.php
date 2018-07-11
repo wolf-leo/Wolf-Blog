@@ -50,4 +50,30 @@ class articleModel extends CommonModel {
         }
         return $info;
     }
+
+//更新
+    public function Dosave($data, $where) {
+        $ret = DbModel($this->table)->where($where)->strict(false)->update($data);
+        return $ret;
+    }
+
+//增加
+    public function Doadd($data) {
+        $id = DbModel($this->table)->strict(false)->insertGetId($data);
+        return $id;
+    }
+
+//删
+    public function Dodel($id, $where) {
+        if ($id) {
+            $where['id'] = $id;
+        }
+        $x = DbModel($this->table)->where($where)->delete();
+        if ($x) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

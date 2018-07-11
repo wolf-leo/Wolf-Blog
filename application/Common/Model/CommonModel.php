@@ -23,15 +23,13 @@ class CommonModel extends BaseModel {
 
     public function _pageparam() {
         $param = request()->param() ?: [];
-        $controller = CONTROLLER_NAME;
-        $action = ACTION_NAME;
-        $str = strtolower($controller . '/' . $action);
-        foreach ($param as $key => $value) {
-            if (strpos(strtolower($key), $str) !== FALSE) {
-                unset($param[$key]);
-            }
+        $controller = strtolower(CONTROLLER_NAME) == 'index' ? null : strtolower(CONTROLLER_NAME);
+        $action = strtolower(ACTION_NAME) == 'index' ? null : strtolower(ACTION_NAME);
+        $module = strtolower(MODULE_NAME) == 'index' ? null : '/' . strtolower(MODULE_NAME);
+        if (isset(array_keys($param)[0])) {
+            unset($param[array_keys($param)[0]]);
         }
-        return ['query' => $param];
+        return ['query' => $param, 'path' => $module . '/' . $controller . '/' . $action];
     }
 
 }

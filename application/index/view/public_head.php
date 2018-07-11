@@ -4,8 +4,8 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
         <title>{$title|default=WEB_TITLE}</title>
-        <link rel="stylesheet" href="/src/blog/css/blog-style.css?v=1.51" />
-        <link rel="stylesheet" href="/src/blog/css/blog-pc.css?v=2.37" />
+        <link rel="stylesheet" href="/src/blog/css/blog-style.css?v=1.53" />
+        <link rel="stylesheet" href="/src/blog/css/blog-pc.css?v=2.38" />
         <link rel="stylesheet" href="/src/blog/css/blog-ipad.css?v=1.85" />
         <link rel="stylesheet" href="/src/blog/css/blog-phone.css?v=2.32" />
         <link rel="stylesheet" href="/src/blog/css/blog-phone2.css?v=1.70" />
