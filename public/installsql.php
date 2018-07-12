@@ -19,6 +19,7 @@ if (!isset($database) || !is_array($database) || empty($database)) {
 }
 $lock_file = dirname($root_path) . DIRECTORY_SEPARATOR . 'extend' . DIRECTORY_SEPARATOR . 'installsql.lock';
 if (file_exists($lock_file)) {
+    header("Location:/");
     return TRUE;
 }
 $sql_base = dirname($root_path) . DIRECTORY_SEPARATOR . 'extend' . DIRECTORY_SEPARATOR . 'myblog.sql';
