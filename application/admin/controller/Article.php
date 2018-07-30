@@ -15,7 +15,7 @@ class Article extends AdminBaseController {
     }
 
     public function index() {
-        $page = input('page');
+        $page = input('page',1);
         $pageSize = 5; //每页显示的数量
         $where = [];
         if (input('id')) {

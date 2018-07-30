@@ -2119,6 +2119,30 @@ class Query
     }
 
     /**
+     * 设置数据字段获取器
+     * @access public
+     * @param  string|array $name       字段名
+     * @param  callable     $callback   闭包获取器
+     * @return $this
+     */
+    public function withAttr($name, $callback = null)
+    {
+        if (is_array($name)) {
+            foreach ($name as $key => $val) {
+                $key = Loader::parseName($key);
+
+                $this->options['with_attr'][$key] = $val;
+            }
+        } else {
+            $name = Loader::parseName($name);
+
+            $this->options['with_attr'][$name] = $callback;
+        }
+
+        return $this;
+    }
+
+    /**
      * 设置JSON字段信息
      * @access public
      * @param  array $json JSON字段
@@ -2813,14 +2837,28 @@ class Query
         if (!empty($this->model)) {
             // 生成模型对象
             if (count($resultSet) > 0) {
+                // 检查动态获取器
+                if (!empty($this->options['with_attr'])) {
+                    foreach ($this->options['with_attr'] as $name => $val) {
+                        if (strpos($name, '.')) {
+                            list($relation, $field) = explode('.', $name);
+
+                            $withRelationAttr[$relation][$field] = $val;
+                            unset($this->options['with_attr'][$name]);
+                        }
+                    }
+                }
+
+                $withRelationAttr = isset($withRelationAttr) ? $withRelationAttr : [];
+
                 foreach ($resultSet as $key => &$result) {
                     // 数据转换为模型对象
-                    $this->resultToModel($result, $this->options, true);
+                    $this->resultToModel($result, $this->options, true, $withRelationAttr);
                 }
 
                 if (!empty($this->options['with'])) {
                     // 预载入
-                    $result->eagerlyResultSet($resultSet, $this->options['with']);
+                    $result->eagerlyResultSet($resultSet, $this->options['with'], $withRelationAttr);
                 }
 
                 // 模型数据集转换
@@ -2829,11 +2867,7 @@ class Query
                 $resultSet = $this->model->toCollection($resultSet);
             }
         } else {
-            if (!empty($this->options['json'])) {
-                foreach ($resultSet as &$result) {
-                    $this->jsonResult($result, $this->options['json'], true);
-                }
-            }
+            $this->resultSet($resultSet);
 
             if ('collection' == $this->connection->getConfig('resultset_type')) {
                 // 返回Collection对象
@@ -2847,6 +2881,27 @@ class Query
         }
 
         return $resultSet;
+    }
+
+    /**
+     * 处理数据集
+     * @access public
+     * @param  array $resultSet
+     * @return void
+     */
+    protected function resultSet(&$resultSet)
+    {
+        if (!empty($this->options['json'])) {
+            foreach ($resultSet as &$result) {
+                $this->jsonResult($result, $this->options['json'], true);
+            }
+        }
+
+        if (!empty($this->options['with_attr'])) {
+            foreach ($resultSet as &$result) {
+                $this->getResultAttr($result, $this->options['with_attr']);
+            }
+        }
     }
 
     /**
@@ -2887,8 +2942,8 @@ class Query
             if (!empty($this->model)) {
                 // 返回模型对象
                 $this->resultToModel($result, $this->options);
-            } elseif (!empty($this->options['json'])) {
-                $this->jsonResult($result, $this->options['json'], true);
+            } else {
+                $this->result($result);
             }
         } elseif (!empty($this->options['fail'])) {
             $this->throwNotFound($this->options);
@@ -2898,18 +2953,66 @@ class Query
     }
 
     /**
-     * JSON字段数据转换
+     * 处理数据
      * @access protected
      * @param  array $result     查询数据
-     * @param  array $json       JSON字段
-     * @param  bool  $assoc      是否转换为数组
      * @return void
      */
-    protected function jsonResult(&$result, $json = [], $assoc = false)
+    protected function result(&$result)
+    {
+        if (!empty($this->options['json'])) {
+            $this->jsonResult($result, $this->options['json'], true);
+        }
+
+        if (!empty($this->options['with_attr'])) {
+            $this->getResultAttr($result, $this->options['with_attr']);
+        }
+    }
+
+    /**
+     * 使用获取器处理数据
+     * @access protected
+     * @param  array $result     查询数据
+     * @param  array $withAttr   字段获取器
+     * @return void
+     */
+    protected function getResultAttr(&$result, $withAttr = [])
+    {
+        foreach ($withAttr as $name => $closure) {
+            if (strpos($name, '.')) {
+                // 支持JSON字段 获取器定义
+                list($key, $field) = explode('.', $name);
+
+                if (isset($result[$key])) {
+                    $result[$key][$field] = $closure(isset($result[$key][$field]) ? $result[$key][$field] : null, $result[$key]);
+                }
+            } else {
+                $result[$name] = $closure(isset($result[$name]) ? $result[$name] : null, $result);
+            }
+        }
+    }
+
+    /**
+     * JSON字段数据转换
+     * @access protected
+     * @param  array $result            查询数据
+     * @param  array $json              JSON字段
+     * @param  bool  $assoc             是否转换为数组
+     * @param  array $withRelationAttr  关联获取器
+     * @return void
+     */
+    protected function jsonResult(&$result, $json = [], $assoc = false, $withRelationAttr = [])
     {
         foreach ($json as $name) {
             if (isset($result[$name])) {
                 $result[$name] = json_decode($result[$name], $assoc);
+
+                if (isset($withRelationAttr[$name])) {
+                    foreach ($withRelationAttr[$name] as $key => $closure) {
+                        $data                = get_object_vars($result[$name]);
+                        $result[$name]->$key = $closure(isset($result[$name]->$key) ? $result[$name]->$key : null, $data);
+                    }
+                }
             }
         }
     }
@@ -2917,28 +3020,47 @@ class Query
     /**
      * 查询数据转换为模型对象
      * @access protected
-     * @param  array $result     查询数据
-     * @param  array $options    查询参数
-     * @param  bool  $resultSet  是否为数据集查询
+     * @param  array $result            查询数据
+     * @param  array $options           查询参数
+     * @param  bool  $resultSet         是否为数据集查询
+     * @param  array $withRelationAttr  关联字段获取器
      * @return void
      */
-    protected function resultToModel(&$result, $options = [], $resultSet = false)
+    protected function resultToModel(&$result, $options = [], $resultSet = false, $withRelationAttr = [])
     {
+        // 动态获取器
+        if (!empty($options['with_attr']) && empty($withRelationAttr)) {
+            foreach ($options['with_attr'] as $name => $val) {
+                if (strpos($name, '.')) {
+                    list($relation, $field) = explode('.', $name);
+
+                    $withRelationAttr[$relation][$field] = $val;
+                    unset($options['with_attr'][$name]);
+                }
+            }
+        }
+
+        // JSON 数据处理
         if (!empty($options['json'])) {
-            $this->jsonResult($result, $options['json'], $options['json_assoc']);
+            $this->jsonResult($result, $options['json'], $options['json_assoc'], $withRelationAttr);
         }
 
         $condition = (!$resultSet && isset($options['where']['AND'])) ? $options['where']['AND'] : null;
         $result    = $this->model->newInstance($result, $condition);
 
+        // 动态获取器
+        if (!empty($options['with_attr'])) {
+            $result->setModelAttrs($options['with_attr']);
+        }
+
         // 关联查询
         if (!empty($options['relation'])) {
-            $result->relationQuery($options['relation']);
+            $result->relationQuery($options['relation'], $withRelationAttr);
         }
 
         // 预载入查询
         if (!$resultSet && !empty($options['with'])) {
-            $result->eagerlyResult($result, $options['with']);
+            $result->eagerlyResult($result, $options['with'], $withRelationAttr);
         }
 
         // 关联统计
@@ -2947,6 +3069,7 @@ class Query
                 $result->relationCount($result, $val[0], $val[1], $val[2]);
             }
         }
+
     }
 
     /**
