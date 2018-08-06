@@ -1489,6 +1489,11 @@ class Query
 
         $logic = strtoupper($logic);
 
+        if ($field instanceof Where) {
+            $this->options['where'][$logic] = $field->parse();
+            return $this;
+        }
+
         if (is_string($field) && !empty($this->options['via']) && !strpos($field, '.')) {
             $field = $this->options['via'] . '.' . $field;
         }
@@ -2953,6 +2958,91 @@ class Query
     }
 
     /**
+     * 查找单条记录
+     * @access public
+     * @param  mixed     $data  主键值或者查询条件（闭包）
+     * @param  mixed     $with  关联预查询
+     * @param  bool      $cache 是否缓存
+     * @param  bool      $failException 是否抛出异常
+     * @return static|null
+     * @throws exception\DbException
+     */
+    public function get($data, $with = [], $cache = false, $failException = false)
+    {
+        if (is_null($data)) {
+            return;
+        }
+
+        if (true === $with || is_int($with)) {
+            $cache = $with;
+            $with  = [];
+        }
+
+        return $this->parseQuery($data, $with, $cache)
+            ->failException($failException)
+            ->find($data);
+    }
+
+    /**
+     * 查找单条记录 如果不存在直接抛出异常
+     * @access public
+     * @param  mixed     $data  主键值或者查询条件（闭包）
+     * @param  mixed     $with  关联预查询
+     * @param  bool      $cache 是否缓存
+     * @return static|null
+     * @throws exception\DbException
+     */
+    public function getOrFail($data, $with = [], $cache = false)
+    {
+        return $this->get($data, $with, $cache, true);
+    }
+
+    /**
+     * 查找所有记录
+     * @access public
+     * @param  mixed        $data  主键列表或者查询条件（闭包）
+     * @param  array|string $with  关联预查询
+     * @param  bool         $cache 是否缓存
+     * @return static[]|false
+     * @throws exception\DbException
+     */
+    public function all($data = null, $with = [], $cache = false)
+    {
+        if (true === $with || is_int($with)) {
+            $cache = $with;
+            $with  = [];
+        }
+
+        return $this->parseQuery($data, $with, $cache)->select($data);
+    }
+
+    /**
+     * 分析查询表达式
+     * @access public
+     * @param  mixed  $data  主键列表或者查询条件（闭包）
+     * @param  string $with  关联预查询
+     * @param  bool   $cache 是否缓存
+     * @return Query
+     */
+    protected function parseQuery(&$data, $with, $cache)
+    {
+        $result = $this->with($with)->cache($cache);
+
+        if (is_array($data) && key($data) !== 0) {
+            $result = $result->where($data);
+            $data   = null;
+        } elseif ($data instanceof \Closure) {
+            $data($result);
+            $data = null;
+        } elseif ($data instanceof Query) {
+            $result = $data->with($with)->cache($cache);
+            $data   = null;
+        }
+
+        return $result;
+    }
+
+    /**
      * 处理数据
      * @access protected
      * @param  array $result     查询数据
@@ -3045,8 +3135,7 @@ class Query
             $this->jsonResult($result, $options['json'], $options['json_assoc'], $withRelationAttr);
         }
 
-        $condition = (!$resultSet && isset($options['where']['AND'])) ? $options['where']['AND'] : null;
-        $result    = $this->model->newInstance($result, $condition);
+        $result = $this->model->newInstance($result, $resultSet ? null : $this->getModelUpdateCondition($options));
 
         // 动态获取器
         if (!empty($options['with_attr'])) {
@@ -3069,7 +3158,16 @@ class Query
                 $result->relationCount($result, $val[0], $val[1], $val[2]);
             }
         }
+    }
 
+    /**
+     * 获取模型的更新条件
+     * @access protected
+     * @param  array $options 查询参数
+     */
+    protected function getModelUpdateCondition(array $options)
+    {
+        return isset($options['where']['AND']) ? $options['where']['AND'] : null;
     }
 
     /**
