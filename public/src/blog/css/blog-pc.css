@@ -2,6 +2,8 @@
     /*header-web*/
     #header-web {
         width: 100%;
+        background: #333;
+        margin-bottom: 5px;
     }
     #header-web3 {
         width: 100%;
@@ -73,6 +75,7 @@
         font-size: 17px;
         color: black;
         padding: 0 10px;
+        color: #FFF;
     }
     .header-nav .menu li a:after {
         content: "";

@@ -1,7 +1,8 @@
 /* Just for the example. Fee free to delete these three lines */
 .pikachoose {
-    width: 750px;
+    /*width: 750px;*/
     position: relative;
+    height: 300px;
 }
 
 /* Style the thumbnails */
@@ -195,8 +196,8 @@
 }
 .pikachoose{
     margin-top: 12px;
-    width:100%;
-    position:relative;
+    position: relative;
+    border: 3px #eee solid;
 }
 #pikame{width: 150px;}
 .pika-thumbs {margin: 10px 0 0 17px; width:250px;position: absolute;top: 10px;right: 30px;}

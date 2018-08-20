@@ -24,7 +24,7 @@ body {
 }
 @media only screen and (min-width: 1200px) {
     body{
-        background: url(/src/blog/image/background.jpg) repeat repeat fixed top;  
+        /*background: url(/src/blog/image/background.jpg) repeat repeat fixed top;*/  
         background-position: 89% 35%;
     }
 }

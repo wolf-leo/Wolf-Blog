@@ -8,7 +8,7 @@
     <!-- /header -->
     <div id="container">
         <?php if ($tops): ?>
-            <div class="pikachoose pikaloadimg">
+            <div class="pikachoose ">
                 <div class="showthispika">
                     <ul id="pikame" class="jcarousel-skin-pika">
                         <volist name='tops' id='vo'>
@@ -71,9 +71,9 @@
 <script>
     $(function () {
         setTimeout(function () {
-            $('.showthispika').fadeIn('slow');
-            $('.pikachoose').removeClass('pikaloadimg');
-        }, 300);
+        $('.showthispika').fadeIn('slow');
+//            $('.pikachoose').removeClass('pikaloadimg');
+        }, 100);
         $("#pikame").PikaChoose({carousel: true, carouselVertical: true});
     });
 </script>
