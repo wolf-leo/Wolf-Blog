@@ -9,4 +9,4 @@ CREATE TABLE `article` (
   `c_time`  timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP ,
   PRIMARY KEY (`id`),
   KEY `index_title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+) ENGINE=InnoDB; 
