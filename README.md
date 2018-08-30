@@ -13,7 +13,7 @@
 
 之后还会继续更新Thinkphp版本
 
-本地搭建建议使用PHPstudy环境，官方地址：http://www.phpstudy.net/
+本地搭建建议使用PHPstudy环境，官方地址：http://phpstudy.php.cn/
 
 特别提醒：项目的访问目录是/public/
 
