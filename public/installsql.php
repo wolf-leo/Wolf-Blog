@@ -35,7 +35,6 @@ $dbUser = $database['username'];
 $dbPwd = $database['password'];
 $dbPrefix = $database['prefix'];
 $conn = mysqli_connect($dbHost, $dbUser, $dbPwd);
-
 if (!$conn) {
     exit("连接数据库失败！");
 }
@@ -64,13 +63,25 @@ if (is_array($tables)) {
         return TRUE;
     }
 }
-$result1 = mysqli_query($conn, $sql1);
+
+$result1 = FALSE;
+$exp_sql1 = explode(";\n", trim($sql1));
+foreach ($exp_sql1 as $query) {
+    $result1 = mysqli_query($conn, $query);
+}
+if (!$result1) {
+    exit("添加数据表失败！");
+}
 $exp = array_filter(explode('INSERT INTO', ($sql2)));
 $count = count($exp) + 1;
 $value = '';
+$result2 = FALSE;
 foreach ($exp as $key => $value) {
     $query_sql = 'INSERT INTO ' . htmlspecialchars_decode($value);
     $result2 = mysqli_query($conn, $query_sql);
+}
+if (!$result2) {
+    exit("新增数据表数据失败！");
 }
 mysqli_close($conn);
 if ($result2) {

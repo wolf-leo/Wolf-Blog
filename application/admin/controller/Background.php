@@ -4,17 +4,14 @@ namespace app\admin\controller;
 
 use app\Common\Controller\AdminBaseController;
 
-class Article extends AdminBaseController {
+class Background extends AdminBaseController {
 
     protected $mod;
 
     public function __construct() {
         parent::__construct();
-        $this->mod = new \app\admin\model\articleModel();
+        $this->mod = new \app\admin\model\backgroundModel();
         $this->assign('notes', $this->mod->notes);
-        $category = new \app\admin\model\categoryModel();
-        $type = $category->getField(['status' => 1], 'id,title', 'sort asc');
-        $this->assign('type', $type);
     }
 
     public function index() {
@@ -41,15 +38,27 @@ class Article extends AdminBaseController {
         if (IS_POST) { //数据操作
             $data = input('post.');
             unset($data['id']);
-            $file = request()->file('img'); //图片上传
+            $file = $file2 = '';
+            if (!empty($_FILES['head_back_img']['tmp_name'])) {
+                $file = request()->file('head_back_img'); //图片上传  
+            }
+            if (!empty($_FILES['main_back_img']['tmp_name'])) {
+                $file2 = request()->file('main_back_img'); //图片上传
+            }
             if ($file) {
                 $file_path = \think\facade\Env::get('ROOT_PATH') . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads';
                 $img_path = DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
                 $img_info = $file->move($file_path);
                 if ($img_info) {
-                    $data['img'] = $img_path . $img_info->getSaveName();
-                } else {
-                    $this->error($file->getError());
+                    $data['head_back_img'] = $img_path . $img_info->getSaveName();
+                }
+            }
+            if ($file2) {
+                $file_path2 = \think\facade\Env::get('ROOT_PATH') . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads';
+                $img_path2 = DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
+                $img_info2 = $file2->move($file_path2);
+                if ($img_info2) {
+                    $data['main_back_img'] = $img_path2 . $img_info2->getSaveName();
                 }
             }
             if ($id) { //更新数据
@@ -62,23 +71,6 @@ class Article extends AdminBaseController {
             $x and $this->success('操作成功', CONTROLLER_NAME . '/index', NULL, 1) or $this->error('操作失败');
         } else {
             return $this->adminTpl();
-        }
-    }
-
-//编辑器图片上传 【单张上传操作，多图上传自行研究- -】
-    public function UploadPic() {
-        $file = request()->file('info_upload_img');
-        if ($file) {
-            $file_path = \think\facade\Env::get('ROOT_PATH') . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads';
-            $img_path = DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
-            $img_info = $file->move($file_path);
-            if ($img_info) {
-                $img = $img_path . $img_info->getSaveName();
-                $ret = ["errno" => 0, 'data' => [$img]];
-                return json($ret);
-            } else {
-                $this->error($file->getError());
-            }
         }
     }
 

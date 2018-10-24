@@ -11,9 +11,12 @@ class BlogBaseController extends BaseController {
 
 //获取博客头部分类
     protected function blogHeadNav() {
-        $mod = new \app\admin\model\articleModel();
-        $headernav = $mod->notes;
+        $category = new \app\admin\model\categoryModel();
+        $background = new \app\admin\model\backgroundModel();
+        $headernav = $category->getField(['status' => 1], 'id,title', 'sort asc');
+        $backimg = $background->getOne(1);
         $this->assign('headernav', $headernav);
+        $this->assign('backimg', $backimg);
     }
 
     public function jump404() {

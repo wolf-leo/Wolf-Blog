@@ -43,6 +43,7 @@
         width: 50px;   
         border-radius: 50%;
         position: absolute;
+        z-index: 99;
     }
     .menu {
         height: 40px;

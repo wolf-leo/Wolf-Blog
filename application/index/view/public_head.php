@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="/src/blog/css/blog-phone.css?v=2.32" />
         <link rel="stylesheet" href="/src/blog/css/blog-phone2.css?v=1.70" />
         <script src="https://apps.bdimg.com/libs/jquery/2.0.3/jquery.js" type="text/javascript"></script>
+        <style><if ($backimg.head_back_img) AND ( $backimg.is_head==1)>#header-web{background-image: url(<?php echo str_replace("\\", "/", $backimg['head_back_img']) ?>) !important;background-size:100%;background-repeat:no-repeat;}</if>
+            <if ($backimg.main_back_img) AND ( $backimg.is_main==1)>body{background: url(<?php echo str_replace("\\", "/", $backimg['main_back_img']) ?>) !important;background-repeat: repeat-x;}</if></style>
     </head>
     <body>
         <header id="header-web">
@@ -26,7 +28,7 @@
                         <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home">
                             <a href="/">首页</a>
                         </li>
-                        <volist name="headernav.type" id="v">
+                        <volist name="headernav" id="v">
                             <li class="menu-item menu-item-type-taxonomy menu-item-object-category">
                                 <a href="/?type={$key}" <?php if (isset($type) && $type == $key): ?>class="current"<?php endif; ?>>{$v}</a>
                             </li>

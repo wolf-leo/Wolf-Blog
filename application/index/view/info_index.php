@@ -3,7 +3,7 @@
     </div>
     <!-- /header -->
     <div id="container">
-        <nav id="mbx">当前位置: <a href="javascript:void(0);" onclick="window.history.go(-1);">返回</a> &gt; <a href="/?type={$info.type}">{$headernav['type'][$info['type']]}</a></nav>
+        <nav id="mbx">当前位置: <a href="javascript:void(0);" onclick="window.history.go(-1);">返回</a> &gt; <a href="/?type={$info.type}">{$headernav[$info['type']]}</a></nav>
         <article class="content">
             <header class="contenttitle">
                 <a href="javascript:;" class="count"></a>

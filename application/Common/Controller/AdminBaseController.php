@@ -9,7 +9,11 @@ class AdminBaseController extends BaseController {
         if ($checkLogin) {
             $this->isLogin();
         }
-        $tempname = '/' . strtolower(CONTROLLER_NAME) . '/' . strtolower(ACTION_NAME);
+        $controller = strtolower(CONTROLLER_NAME);
+        $action = strtolower(ACTION_NAME);
+        $tempname = '/' . $controller . '/' . $action;
+        $this->assign('controller', $controller);
+        $this->assign('action', $action);
         $this->assign('tempname', $tempname);
     }
 

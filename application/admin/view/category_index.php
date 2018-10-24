@@ -1,5 +1,5 @@
 <div class="aright">
-    <div class="arz" style="float: left;margin: 0px 20px 20px 30px;"><a href="{:url('article/edit')}"><i class="layui-icon">&#xe608;</i>添加文章</a></div>
+    <div class="arz" style="float: left;margin: 0px 20px 20px 30px;"><a href="{:url('category/edit')}"><i class="layui-icon">&#xe608;</i>添加栏目</a></div>
 
     <div style="float: left;">
         <form class="layui-form" action="" method="get">
@@ -13,8 +13,7 @@
             <tr>
                 <th width="2%" align="center">id</th>
                 <th width="15%" align="center">文章标题</th>
-                <th width="7%" align="center">封面图</th>
-                <th width="5%" align="center">文章类型</th>
+                <th width="5%" align="center">排序</th>
                 <th width="5%" align="center">状态</th>
                 <th width="10%" align="center">添加时间</th>
                 <th width="5%" align="center">基本操作</th>
@@ -22,13 +21,12 @@
             <volist name="list" id="vo">
                 <tr>
                     <td align="center">{$vo.id}</td>
-                    <td align="center"><a target="_blank" href="/info/{$vo.id}/">{$vo.title}</a></td>
-                    <td align="center"><img src='{$vo.img|default=""}' height="50"></td>
-                    <td align="center">{$type[$vo['type']]}</td>
+                    <td align="center">{$vo.title}</td>
+                    <td align="center">{$vo.sort}</td>
                     <td align="center">{$notes['status'][$vo['status']]}</td>
                     <td align="center">{$vo.c_time}</td>
                     <td align="center">
-                        <a href="{:url('article/edit',['id'=>$vo['id']])}" class="layui-btn layui-btn-small">修改</a>
+                        <a href="{:url('category/edit',['id'=>$vo['id']])}" class="layui-btn layui-btn-small">修改</a>
                     </td>
                 </tr>
             </volist>

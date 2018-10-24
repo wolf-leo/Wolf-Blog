@@ -37,7 +37,7 @@
                         <a href="/info/{$vo.id}/">{$vo.title}</a> </h2>
                     <address class="meccaddress">
                         <time>{$vo.c_time}</time>
-                        <a href='/?type={$vo.type}'>{$headernav['type'][$vo['type']]}</a>
+                        <a href='/?type={$vo.type}'>{$headernav[$vo['type']]}</a>
                     </address>
                     <a href="/info/{$vo.id}/">
                         <p>

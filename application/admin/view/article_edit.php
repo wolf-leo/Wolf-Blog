@@ -28,7 +28,7 @@
             <div class="layui-input-block">
                 <select name="type">
                     <option value="0">请选择</option>
-                    <volist name="notes.type" id="vo">
+                    <volist name="type" id="vo">
                         <option <if ($info['type']==$key)>selected="selected"</if> value="{$key}">{$vo}</option>
                     </volist>
                 </select>

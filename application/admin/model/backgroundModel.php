@@ -4,10 +4,10 @@ namespace app\admin\model;
 
 use app\Common\Model\CommonModel;
 
-class articleModel extends CommonModel {
+class backgroundModel extends CommonModel {
 
     // 设置当前模型对应的完整数据表名称
-    protected $table = 'article';
+    protected $table = 'background';
     protected $pk = 'id'; //主键
 
     public function __construct() {
@@ -15,7 +15,8 @@ class articleModel extends CommonModel {
     }
 
     public $notes = array(//数值注释
-        'status' => array(1 => '正常', 2 => '禁用'),
+        'is_head' => array(1 => '开启', 2 => '关闭'),
+        'is_main' => array(1 => '开启', 2 => '关闭'),
     );
 
     //查询

@@ -22,6 +22,8 @@
                 <h3><i class="layui-icon" style="position: relative;right: 3px;top: 1px;font-size: 18px;color: #009688;">&#xe643;</i>操作菜单</h3>
                 <ul class="cl">
                     <li><i class="layui-icon">&#xe63c;</i><a href="{:url('Article/index')}">文章管理</a></li>
+                    <li><i class="layui-icon">&#xe63c;</i><a href="{:url('Category/index')}">栏目管理</a></li>
+                    <li><i class="layui-icon">&#xe63c;</i><a href="{:url('Background/index')}">背景图管理</a></li>
                 </ul>
             </div>
         </div>
