@@ -13,11 +13,8 @@ class Info extends BlogBaseController {
     }
 
     public function index() {
-        $id = input('id');
+        $id = input('id/d', 0);
         if (!$id) {
-            return $this->jump404();
-        }
-        if (!isNumber($id)) {
             return $this->jump404();
         }
         $mod = new \app\admin\model\articleModel();

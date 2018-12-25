@@ -11,11 +11,8 @@ class Index extends BlogBaseController {
     }
 
     public function index() {
-        $page = input('get.page', 1);
-        $type = input('get.type', 0);
-        if (isset($type) && !isNumber($type)) {
-            return $this->jump404();
-        }
+        $page = input('get.page/d', 1);
+        $type = input('get.type/d', 0);
         $pageSize = 5; //每页显示5条数据 可自行修改
         $mod = new \app\admin\model\articleModel();
         $where[] = ['status', '=', 1];
