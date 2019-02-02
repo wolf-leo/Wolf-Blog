@@ -50,7 +50,7 @@
                                 layer.msg(msg.msg);
                                 return;
                             } else {
-                                window.location.href = '{:url("index/index")}';
+                                window.location.href = '{:url("admin/index/index")}';
                             }
                         }
                     });
