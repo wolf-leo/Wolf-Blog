@@ -66,6 +66,9 @@ if (is_array($tables)) {
 
 $result1 = FALSE;
 $exp_sql1 = explode(";\n", trim($sql1));
+if (count($exp_sql1) < 3) {   // 兼容回车
+    $exp_sql1 = explode(";" . PHP_EOL, trim($sql1));
+}
 foreach ($exp_sql1 as $query) {
     $result1 = mysqli_query($conn, $query);
 }
