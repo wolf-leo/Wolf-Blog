@@ -20,7 +20,7 @@
         <div class="layui-form-item" style="width: 300px;">
             <label class="layui-form-label">显示头背景</label>
             <div class="layui-input-block">
-                <select name="status">
+                <select name="is_head">
                     <volist name="notes.is_head" id="vo">
                         <option <if ($info['is_head']==$key)>selected="selected"</if> value="{$key}">{$vo}</option>
                     </volist>
@@ -42,7 +42,7 @@
         <div class="layui-form-item" style="width: 300px;">
             <label class="layui-form-label">显示主背景</label>
             <div class="layui-input-block">
-                <select name="status">
+                <select name="is_main">
                     <volist name="notes.is_main" id="vo">
                         <option <if ($info['is_main']==$key)>selected="selected"</if> value="{$key}">{$vo}</option>
                     </volist>

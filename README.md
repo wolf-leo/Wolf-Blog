@@ -21,7 +21,7 @@
 
 搭建后的样式请预览同级目录下的demo.png文件
 
-__配置好database.php的数据库信息，绑定访问路径到/public，访问首页即可__
+<label style="color:red">__配置好database.php的数据库信息，绑定访问路径到/public，访问首页即可__</label>
 
 
 ## 访问说明

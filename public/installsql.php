@@ -5,9 +5,9 @@
  * 
  * 请先确认好/config/database.php的数据库连接配置
  *
- *  version = '1.0';
+ *  version = '1.1';
  */
-header('Content-Type: text/html; charset=UTF-8');
+// header('Content-Type: text/html; charset=UTF-8');
 date_default_timezone_set('PRC');
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 @set_time_limit(1000);
@@ -34,18 +34,22 @@ $dbName = $database['database'];
 $dbUser = $database['username'];
 $dbPwd = $database['password'];
 $dbPrefix = $database['prefix'];
+$dbCharset = $database['charset'];
 $conn = mysqli_connect($dbHost, $dbUser, $dbPwd);
 if (!$conn) {
     exit("连接数据库失败！");
 }
-mysqli_query($conn, "SET NAMES 'utf8'");
+mysqli_query($conn, "SET NAMES '{$dbCharset}'");
 $version = mysqli_get_server_info($conn);
-
-if ($version < 4.1) {
+$version_exp=explode('.',$version);
+if(count($version_exp) < 1){
+	exit("获取数据库版本号失败！");
+}
+if ($version_exp[0] < 4) {
     exit("数据库版本太低！");
 }
 
-if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `" . $dbName . "`;")) {
+if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `" . $dbName . "` DEFAULT CHARSET {$dbCharset} ;")) {
     exit("数据库 ' . $dbName . ' 不存在，也没权限创建新的数据库！");
 }
 
@@ -66,6 +70,9 @@ if (is_array($tables)) {
 
 $result1 = FALSE;
 $exp_sql1 = explode(";\n", trim($sql1));
+if (count($exp_sql1) < 3) {   // 兼容回车
+    $exp_sql1 = explode(";" . PHP_EOL, trim($sql1));
+}
 foreach ($exp_sql1 as $query) {
     $result1 = mysqli_query($conn, $query);
 }
@@ -73,12 +80,13 @@ if (!$result1) {
     exit("添加数据表失败！");
 }
 $exp = array_filter(explode('INSERT INTO', ($sql2)));
+
 $count = count($exp) + 1;
 $value = '';
 $result2 = FALSE;
 foreach ($exp as $key => $value) {
     $query_sql = 'INSERT INTO ' . htmlspecialchars_decode($value);
-    $result2 = mysqli_query($conn, $query_sql);
+	$result2 = mysqli_query($conn, $query_sql);
 }
 if (!$result2) {
     exit("新增数据表数据失败！");
